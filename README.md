@@ -1,20 +1,22 @@
 # chatMe
 
-A small AI-powered backend built with Node.js.
+A small AI-powered backend built with Node.js and TypeScript.
 
-## Current Status
+## Status
 
 🚧 Under development
 
 ## Tech Stack
 
 - Node.js
-- Express
 - TypeScript
+- Express
 
-## Running Locally
+## Planned Features
 
-Install dependencies:
-
-```bash
-npm install
+- LLM integration
+- Conversation history
+- PostgreSQL
+- API validation
+- Automated tests
+- Docker
