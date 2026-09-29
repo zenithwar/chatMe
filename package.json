@@ -1,0 +1,19 @@
+{
+  "name": "ChatMe - V1.0",
+  "version": "1.0.0",
+  "description": "Simple AI Chat App Using node.js and gemini API",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js"
+  },
+  "keywords": [],
+  "author": "Yasa Satria Wibawa",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "express": "^5.2.1",
+    "nodemon": "^3.1.14"
+  }
+}
