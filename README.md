@@ -1,6 +1,6 @@
 # chatMe
 
-A small AI-powered backend built with Node.js and TypeScript.
+A small AI-powered backend built with Node.js for backend and React for frontend.
 
 ## Status
 
@@ -8,9 +8,11 @@ A small AI-powered backend built with Node.js and TypeScript.
 
 ## Tech Stack
 
+# Backend
 - Node.js
-- TypeScript
 - Express
+# Frontend
+- React
 
 ## Planned Features
 
@@ -20,3 +22,7 @@ A small AI-powered backend built with Node.js and TypeScript.
 - API validation
 - Automated tests
 - Docker
+
+## Important!
+
+This app never save your Gemini API key, for your own API key setup in .env file 
