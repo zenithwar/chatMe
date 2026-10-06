@@ -1,8 +1,11 @@
 const express = require("express");
-const chatController = require("../controllers/chatControllers");
+const createChatController = require("../controllers/chatControllers");
+const gemini = require("../services/gemini");
 
 const router = express.Router();
+const chatController = createChatController(gemini);
 
 router.post("/chat", chatController);
 
 module.exports = router;
+
