@@ -94,7 +94,7 @@ function createTestApp(option) {
     });
 }
 createTestApp({
-    description: "Pesan kosong harus menghasilkan 400",
+    description: "Pesan kosong harus menghasilkan 400 ",
     app,
     expectedStatusCode: 400,
     message: "",
