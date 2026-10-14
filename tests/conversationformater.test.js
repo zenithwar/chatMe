@@ -36,3 +36,9 @@ test("history harus bisa diubah ke format Gemini", () => {
         }
     ]);
 });
+
+test("history kosong harus menghasilkan array kosong", () => {
+    const result = formatForGemini([]);
+
+    assert.deepStrictEqual(result, []);
+});

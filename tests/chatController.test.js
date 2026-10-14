@@ -64,6 +64,100 @@ const appError = createAppGlobal(fakeGeminiError, fakeLogger);
 const appQuotaError = createAppGlobal(fakeGeminiQuotaError, fakeLogger);
 const appEmptyResponse = createAppGlobal(fakeGeminiEmptyResponse, fakeLogger);
 const appNoCandidates = createAppGlobal(fakeGeminiNoCandidates, fakeLogger);
+const {
+    clearHistory,
+    getHistory
+} = require("../src/services/conversationservice");
+
+function createFakeGeminiWithCapture() {
+    const capturedContents = [];
+
+    async function fakeGemini(contents) {
+        capturedContents.push(contents);
+
+        return {
+            candidates: [
+                {
+                    content: {
+                        parts: [
+                            {
+                                text: "Mock response"
+                            }
+                        ]
+                    }
+                }
+            ]
+        };
+    }
+
+    return {
+        fakeGemini,
+        capturedContents
+    };
+}
+test("Gemini error tidak boleh menyimpan jawaban model ke history", async () => {
+    clearHistory();
+
+    const app = createAppGlobal(fakeGeminiError, fakeLogger);
+
+    const response = await request(app)
+        .post("/api/chat")
+        .send({ message: "Halo" });
+
+    assert.strictEqual(response.statusCode, 500);
+
+    assert.deepStrictEqual(getHistory(), [
+        {
+            role: "user",
+            message: "Halo"
+        }
+    ]);
+
+    clearHistory();
+});
+test("Gemini harus menerima history percakapan sebelumnya", async () => {
+    clearHistory();
+
+    const {
+        fakeGemini,
+        capturedContents
+    } = createFakeGeminiWithCapture();
+
+    const app = createAppGlobal(fakeGemini, fakeLogger);
+
+    // Pesan pertama
+    await request(app)
+        .post("/api/chat")
+        .send({ message: "Nama saya Yasa" });
+
+    // Pesan kedua
+    await request(app)
+        .post("/api/chat")
+        .send({ message: "Siapa nama saya?" });
+
+    assert.deepStrictEqual(capturedContents[1], [
+        {
+            role: "user",
+            parts: [
+                { text: "Nama saya Yasa" }
+            ]
+        },
+        {
+            role: "model",
+            parts: [
+                { text: "Mock response" }
+            ]
+        },
+        {
+            role: "user",
+            parts: [
+                { text: "Siapa nama saya?" }
+            ]
+        }
+    ]);
+
+    clearHistory();
+});
 
 function createTestApp(option) {
     test(option.description, async () => {
@@ -141,6 +235,10 @@ createTestApp({
     expectedResponseMessage: null,
     expectedResponseError: "Invalid Gemini response"
 });
+
+
+
+
 // createTestApp("Pesan valid harus menghasilkan 200", app, 200,"Hello","Mock response");
 // createTestApp("Gemini error harus menghasilkan 500", appError, 500,"Hello",null,"Internal Server Error");
 // createTestApp("Gemini quota error harus menghasilkan 429", appQuotaError, 429,"Hello",null,"Too many requests");

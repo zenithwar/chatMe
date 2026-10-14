@@ -42,6 +42,9 @@
 // module.exports = chat;
 
 const { validateMessage, validateGeminiResponse } = require("../validators/chatValidators");
+const { addMessage, getHistory } = require("../services/conversationservice");
+
+const formatForGemini = require("../services/conversationformater");    
 
 function createChatController(gemini, logger = console) {
 
@@ -56,7 +59,11 @@ function createChatController(gemini, logger = console) {
                 });
             }
 
-            const result = await gemini(message);
+            addMessage("user", message);
+            const history = getHistory();
+            const contents = formatForGemini(history);
+
+            const result = await gemini(contents);
 
             const responseValidation = validateGeminiResponse(result);
 
@@ -66,6 +73,8 @@ function createChatController(gemini, logger = console) {
                 });
             }
 
+            const reply = result.candidates[0].content.parts[0].text;
+            addMessage("model", reply);
             // throw new Error("Test Gemini error");
             // const error = new Error("Test quota error");
 

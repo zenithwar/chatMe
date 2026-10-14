@@ -33,3 +33,19 @@ test("history harus bisa dikosongkan", () => {
 
     asert.deepStrictEqual(getHistory(), []);
 });
+
+test("history saat ini masih menggabungkan pesan dari percakapan berbeda", () => {
+    addMessage("user", "Nama saya Yasa");
+    addMessage("user", "Nama saya Budi");
+
+    asert.deepStrictEqual(getHistory(), [
+        {
+            role: "user",
+            message: "Nama saya Yasa"
+        },
+        {
+            role: "user",
+            message: "Nama saya Budi"
+        }
+    ]);
+});
